@@ -1,0 +1,77 @@
+{
+  "entities": {
+    "tools": {
+      "title": "Tools and Products",
+      "description": "Products and AI tools managed in the store",
+      "properties": {
+        "name": { "type": "string" },
+        "slug": { "type": "string" },
+        "thumbnail": { "type": "string" },
+        "banner": { "type": "string" },
+        "videoDemo": { "type": "string" },
+        "shortDescription": { "type": "string" },
+        "longDescription": { "type": "string" },
+        "priceOriginal": { "type": "number" },
+        "priceSale": { "type": "number" },
+        "rating": { "type": "number" },
+        "reviewCount": { "type": "number" },
+        "purchaseCount": { "type": "number" },
+        "copyCount": { "type": "number" },
+        "categoryId": { "type": "string" },
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "isHot": { "type": "boolean" },
+        "isNew": { "type": "boolean" },
+        "isFree": { "type": "boolean" },
+        "version": { "type": "string" },
+        "lastUpdated": { "type": "string" },
+        "changelog": { "type": "array" },
+        "secretData": { "type": "object" },
+        "faq": { "type": "array" },
+        "seo": { "type": "object" }
+      },
+      "required": ["name", "priceSale", "categoryId"]
+    },
+    "categories": {
+      "title": "Categories",
+      "description": "Product categories",
+      "properties": {
+        "name": { "type": "string" },
+        "icon": { "type": "string" },
+        "count": { "type": "number" }
+      },
+      "required": ["name"]
+    },
+    "orders": {
+      "title": "Orders",
+      "description": "Customer purchase orders",
+      "properties": {
+        "customerName": { "type": "string" },
+        "customerEmail": { "type": "string" },
+        "customerPhone": { "type": "string" },
+        "toolId": { "type": "string" },
+        "toolName": { "type": "string" },
+        "toolPrice": { "type": "number" },
+        "status": { "type": "string" },
+        "paymentMethod": { "type": "string" },
+        "transferCode": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["customerEmail", "toolId", "status"]
+    },
+    "coupons": {
+      "title": "Coupons",
+      "description": "Discount coupons",
+      "properties": {
+        "code": { "type": "string" },
+        "discountType": { "type": "string" },
+        "discountValue": { "type": "number" },
+        "maxUses": { "type": "number" },
+        "usedCount": { "type": "number" },
+        "expiryDate": { "type": "string" },
+        "isActive": { "type": "boolean" }
+      },
+      "required": ["code", "discountType", "discountValue"]
+    }
+  }
+}

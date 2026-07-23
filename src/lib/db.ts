@@ -1,4 +1,24 @@
 import { User, Tool, Category, Order, Coupon, GlobalSettings } from '../types';
+import { db } from './firebase';
+import {
+  collection,
+  doc,
+  getDocs,
+  setDoc,
+  deleteDoc,
+  onSnapshot
+} from 'firebase/firestore';
+
+// Clean object for Firestore (removes undefined values)
+const sanitizeForFirestore = <T>(obj: T): T => {
+  return JSON.parse(JSON.stringify(obj));
+};
+
+const notifyDbUpdated = () => {
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new Event('skch_db_updated'));
+  }
+};
 
 // Default categories
 const DEFAULT_CATEGORIES: Category[] = [
@@ -273,8 +293,89 @@ const setStored = <T>(key: string, val: T): void => {
   localStorage.setItem(key, JSON.stringify(val));
 };
 
-// Simulated State Managers
+// Simulated State Managers + Firestore Persistence
 export class DatabaseService {
+  private static isSyncInitialized = false;
+
+  public static initRealtimeSync(): void {
+    if (this.isSyncInitialized) return;
+    this.isSyncInitialized = true;
+
+    try {
+      // 1. Sync Tools
+      onSnapshot(collection(db, 'tools'), async (snapshot) => {
+        if (snapshot.empty) {
+          // Seed defaults to Firestore if empty
+          for (const t of DEFAULT_TOOLS) {
+            await setDoc(doc(db, 'tools', t.id), sanitizeForFirestore(t));
+          }
+        } else {
+          const tools = snapshot.docs.map(doc => doc.data() as Tool);
+          setStored('skch_tools', tools);
+          notifyDbUpdated();
+        }
+      }, (err) => console.error('Firestore tools sync error:', err));
+
+      // 2. Sync Categories
+      onSnapshot(collection(db, 'categories'), async (snapshot) => {
+        if (snapshot.empty) {
+          for (const c of DEFAULT_CATEGORIES) {
+            await setDoc(doc(db, 'categories', c.id), sanitizeForFirestore(c));
+          }
+        } else {
+          const categories = snapshot.docs.map(doc => doc.data() as Category);
+          setStored('skch_categories', categories);
+          notifyDbUpdated();
+        }
+      }, (err) => console.error('Firestore categories sync error:', err));
+
+      // 3. Sync Orders
+      onSnapshot(collection(db, 'orders'), (snapshot) => {
+        if (!snapshot.empty) {
+          const orders = snapshot.docs.map(doc => doc.data() as Order);
+          setStored('skch_orders', orders);
+          notifyDbUpdated();
+        }
+      }, (err) => console.error('Firestore orders sync error:', err));
+
+      // 4. Sync Coupons
+      onSnapshot(collection(db, 'coupons'), async (snapshot) => {
+        if (snapshot.empty) {
+          for (const cp of DEFAULT_COUPONS) {
+            await setDoc(doc(db, 'coupons', cp.id), sanitizeForFirestore(cp));
+          }
+        } else {
+          const coupons = snapshot.docs.map(doc => doc.data() as Coupon);
+          setStored('skch_coupons', coupons);
+          notifyDbUpdated();
+        }
+      }, (err) => console.error('Firestore coupons sync error:', err));
+
+      // 5. Sync Users
+      onSnapshot(collection(db, 'users'), (snapshot) => {
+        if (!snapshot.empty) {
+          const users = snapshot.docs.map(doc => doc.data() as User);
+          setStored('skch_users', users);
+          notifyDbUpdated();
+        }
+      }, (err) => console.error('Firestore users sync error:', err));
+
+      // 6. Sync Settings
+      onSnapshot(doc(db, 'settings', 'global'), async (snapshotDoc) => {
+        if (!snapshotDoc.exists()) {
+          await setDoc(doc(db, 'settings', 'global'), sanitizeForFirestore(DEFAULT_SETTINGS));
+        } else {
+          const settingsData = snapshotDoc.data() as GlobalSettings;
+          setStored('skch_settings', settingsData);
+          notifyDbUpdated();
+        }
+      }, (err) => console.error('Firestore settings sync error:', err));
+
+    } catch (e) {
+      console.error('Failed to initialize Firestore realtime sync:', e);
+    }
+  }
+
   private static getCategories(): Category[] {
     const cats = getStored<Category[]>('skch_categories', []);
     if (cats.length === 0) {
@@ -316,12 +417,12 @@ export class DatabaseService {
       settings.hotline = '0396989814';
       setStored('skch_settings', settings);
     }
-    // Merge defaults to ensure no keys are missing
     return { ...DEFAULT_SETTINGS, ...settings };
   }
 
   public static updateSettings(settings: GlobalSettings): void {
     setStored('skch_settings', settings);
+    setDoc(doc(db, 'settings', 'global'), sanitizeForFirestore(settings)).catch(err => console.error('Firestore updateSettings error:', err));
   }
 
   // Categories CRUD
@@ -338,11 +439,13 @@ export class DatabaseService {
       list.push(cat);
     }
     setStored('skch_categories', list);
+    setDoc(doc(db, 'categories', cat.id), sanitizeForFirestore(cat)).catch(err => console.error('Firestore saveCategory error:', err));
   }
 
   public static deleteCategory(id: string): void {
     const list = this.getCategories().filter(c => c.id !== id);
     setStored('skch_categories', list);
+    deleteDoc(doc(db, 'categories', id)).catch(err => console.error('Firestore deleteCategory error:', err));
   }
 
   // Tools CRUD
@@ -364,11 +467,13 @@ export class DatabaseService {
       list.push(updatedTool);
     }
     setStored('skch_tools', list);
+    setDoc(doc(db, 'tools', tool.id), sanitizeForFirestore(updatedTool)).catch(err => console.error('Firestore saveTool error:', err));
   }
 
   public static deleteTool(id: string): void {
     const list = this.getTools().filter(t => t.id !== id);
     setStored('skch_tools', list);
+    deleteDoc(doc(db, 'tools', id)).catch(err => console.error('Firestore deleteTool error:', err));
   }
 
   // Increment Copy Count
@@ -377,7 +482,9 @@ export class DatabaseService {
     const idx = list.findIndex(t => t.id === toolId);
     if (idx >= 0) {
       list[idx].copyCount += 1;
+      const updatedTool = list[idx];
       setStored('skch_tools', list);
+      setDoc(doc(db, 'tools', toolId), sanitizeForFirestore(updatedTool)).catch(err => console.error('Firestore incrementCopyCount error:', err));
     }
   }
 
@@ -389,12 +496,17 @@ export class DatabaseService {
   public static saveUser(user: User): void {
     const list = this.getUsers();
     const idx = list.findIndex(u => u.uid === user.uid);
+    const updatedUser = idx >= 0 
+      ? { ...user, updatedAt: new Date().toISOString() }
+      : { ...user, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() };
+
     if (idx >= 0) {
-      list[idx] = { ...user, updatedAt: new Date().toISOString() };
+      list[idx] = updatedUser;
     } else {
-      list.push({ ...user, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() });
+      list.push(updatedUser);
     }
     setStored('skch_users', list);
+    setDoc(doc(db, 'users', user.uid), sanitizeForFirestore(updatedUser)).catch(err => console.error('Firestore saveUser error:', err));
   }
 
   public static listUsers(): User[] {
@@ -452,6 +564,7 @@ export class DatabaseService {
 
     orders.push(newOrder);
     setStored('skch_orders', orders);
+    setDoc(doc(db, 'orders', newOrder.id), sanitizeForFirestore(newOrder)).catch(err => console.error('Firestore createOrder error:', err));
 
     // If a coupon was used, increment its count
     if (couponCode) {
@@ -460,6 +573,7 @@ export class DatabaseService {
       if (cIdx >= 0) {
         coupons[cIdx].usedCount += 1;
         setStored('skch_coupons', coupons);
+        setDoc(doc(db, 'coupons', coupons[cIdx].id), sanitizeForFirestore(coupons[cIdx])).catch(err => console.error('Firestore updateCoupon error:', err));
       }
     }
 
@@ -476,6 +590,7 @@ export class DatabaseService {
       order.approvedBy = status === 'paid' ? adminUid : null;
       orders[idx] = order;
       setStored('skch_orders', orders);
+      setDoc(doc(db, 'orders', order.id), sanitizeForFirestore(order)).catch(err => console.error('Firestore updateOrderStatus error:', err));
 
       // If approved, increment purchaseCount for each tool in the order
       if (status === 'paid') {
@@ -484,6 +599,7 @@ export class DatabaseService {
           const tIdx = tools.findIndex(t => t.id === item.toolId);
           if (tIdx >= 0) {
             tools[tIdx].purchaseCount += 1;
+            setDoc(doc(db, 'tools', tools[tIdx].id), sanitizeForFirestore(tools[tIdx])).catch(err => console.error('Firestore updateToolPurchase error:', err));
           }
         });
         setStored('skch_tools', tools);
@@ -512,11 +628,13 @@ export class DatabaseService {
       list.push(coupon);
     }
     setStored('skch_coupons', list);
+    setDoc(doc(db, 'coupons', coupon.id), sanitizeForFirestore(coupon)).catch(err => console.error('Firestore saveCoupon error:', err));
   }
 
   public static deleteCoupon(id: string): void {
     const list = this.getCoupons().filter(c => c.id !== id);
     setStored('skch_coupons', list);
+    deleteDoc(doc(db, 'coupons', id)).catch(err => console.error('Firestore deleteCoupon error:', err));
   }
 
   // Determine if a user owns a tool

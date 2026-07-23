@@ -51,10 +51,22 @@ export default function App() {
   };
 
   useEffect(() => {
+    // Start Firestore real-time synchronization
+    DatabaseService.initRealtimeSync();
+
     // Authenticate automatically on mount (or retrieve session)
     const user = AuthService.getCurrentUser();
     setCurrentUser(user);
     handleReloadDatabase();
+
+    const handleDbUpdate = () => {
+      handleReloadDatabase();
+    };
+
+    window.addEventListener('skch_db_updated', handleDbUpdate);
+    return () => {
+      window.removeEventListener('skch_db_updated', handleDbUpdate);
+    };
   }, []);
 
   // Sync cart items with user specific states if needed, or maintain simple local
