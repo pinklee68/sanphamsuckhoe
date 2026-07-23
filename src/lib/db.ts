@@ -39,179 +39,178 @@ const DEFAULT_CATEGORIES: Category[] = [
 // Default tools with vertical thumbnail 9:16 and horizontal banner
 const DEFAULT_TOOLS: Tool[] = [
   {
-    id: 'tool-thuc-don-7-ngay',
-    name: 'AI Thực Đơn Cá Nhân Hóa 7 Ngày',
-    slug: 'ai-thuc-don-7-ngay',
-    thumbnail: 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=450&h=800&fit=crop', // Vertical meal-prep
-    banner: 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=1200&h=400&fit=crop',
+    id: 'tool-tra-thanh-nhiet-thai-binh',
+    name: 'Trà Thanh Nhiệt Thái Bình',
+    slug: 'tra-thanh-nhiet-thai-binh',
+    thumbnail: 'https://images.unsplash.com/photo-1576092768241-dec231879fc3?q=80&w=450&h=800&fit=crop',
+    banner: 'https://images.unsplash.com/photo-1576092768241-dec231879fc3?q=80&w=1200&h=400&fit=crop',
     videoDemo: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
-    shortDescription: 'Lên kế hoạch thực đơn ăn uống khoa học, tính toán chi tiết Calo và Macro dành riêng cho thể trạng và mục tiêu của bạn.',
-    longDescription: `### Đột phá công nghệ dinh dưỡng cùng AI
+    shortDescription: 'Trà túi lọc giải độc, mát gan, làm mát cơ thể, thấu hiểu sức khỏe từ thiên nhiên.',
+    longDescription: `### Trà Túi Lọc Giải Độc Thanh Nhiệt Thái Bình
+    
+Trà túi lọc thảo dược thiên nhiên giúp thanh lọc cơ thể, giải độc gan và mát huyết.
 
-Công cụ AI chuyên sâu được tối ưu bởi đội ngũ chuyên gia dinh dưỡng **Sống Khoẻ Cùng Hồng**. Hệ thống sử dụng mô hình ngôn ngữ lớn tiên tiến nhất để phân tích chi tiết các chỉ số thể trạng và mục tiêu sức khỏe của bạn.
-
-#### Các tính năng chính:
-- **Cá nhân hóa tuyệt đối**: Phân tích chiều cao, cân nặng, tỷ lệ mỡ, cường độ vận động và các hạn chế bệnh lý (nếu có).
-- **Tính toán Macro chuẩn xác**: Tự động chia tỷ lệ tinh bột (Carbs), đạm (Protein) và chất béo (Fats) tối ưu nhất cho mục tiêu của bạn.
-- **Danh sách đi chợ tiện lợi**: Tự động tổng hợp và quy đổi trọng lượng thực phẩm cần mua cho cả tuần.
-- **Linh hoạt thay đổi món ăn**: Cho phép đổi món tương đương nếu không thích hoặc dị ứng.
-
-#### Cách sử dụng vô cùng đơn giản:
-1. Nhấp vào **Mở Tool** sau khi sở hữu thành công.
-2. Sao chép mẫu prompt được cung cấp sẵn ở tab VIP.
-3. Thay thế các thông số cá nhân của bạn (tuổi, cân nặng, mục tiêu tăng cơ/giảm mỡ).
-4. Gửi cho AI và nhận thực đơn hoàn hảo ngay lập tức.`,
-    priceOriginal: 299000,
-    priceSale: 149000,
+#### Công dụng nổi bật:
+- **Thanh nhiệt, giải độc**: Làm mát cơ thể, hỗ trợ đào thải độc tố tích tụ lâu ngày.
+- **Bảo vệ tế bào gan**: Hỗ trợ giúp mát gan, hạ men gan và tăng cường chức năng gan.
+- **Làm đẹp da**: Giảm mụn nhọt, thâm sạm do nóng trong người, mang lại làn da tươi trẻ.
+- **Thư giãn tinh thần**: Mùi thơm dịu nhẹ từ thảo mộc giúp giải tỏa căng thẳng sau giờ làm việc.`,
+    priceOriginal: 100000,
+    priceSale: 77000,
     rating: 5,
     reviewCount: 42,
     purchaseCount: 156,
     copyCount: 380,
-    categoryId: 'cat-dinh-duong',
-    tags: ['Dinh dưỡng', 'Giảm cân', 'Thực đơn'],
+    categoryId: 'cat-phong-cach-song',
+    tags: ['Trà thảo dược', 'Thanh nhiệt', 'Giải độc gan', 'Trà túi lọc'],
     isHot: true,
     isNew: false,
     isFree: false,
-    version: 'v1.2',
-    lastUpdated: '2026-07-15T08:00:00Z',
+    version: 'v1.0',
+    lastUpdated: '2026-07-20T08:00:00Z',
     changelog: [
-      { version: 'v1.2', date: '2026-07-15T08:00:00Z', content: 'Tối ưu thuật toán tính toán lượng xơ cho thực đơn Keto và Eat Clean.' },
-      { version: 'v1.1', date: '2026-06-20T08:00:00Z', content: 'Thêm tính năng tự động xuất danh sách mua sắm nguyên liệu thông minh.' },
-      { version: 'v1.0', date: '2026-05-01T08:00:00Z', content: 'Phát hành phiên bản đầu tiên của Trợ lý Thực đơn Dinh dưỡng AI.' }
+      { version: 'v1.0', date: '2026-07-20T08:00:00Z', content: 'Phát hành chính thức Trà Túi Lọc Thanh Nhiệt Thái Bình.' }
     ],
     secretData: {
-      targetLink: 'https://chatgpt.com/g/g-674cb3ba663c8191a3c6b245-chuyen-gia-dinh-duong-ca-nhan-hoa',
-      prompt: `Chào bạn, bạn là một chuyên gia dinh dưỡng đẳng cấp quốc tế. Tôi muốn thiết kế thực đơn ăn uống lành mạnh trong vòng 7 ngày. Sau đây là thông tin cá nhân của tôi:
-- Tuổi: [Nhập tuổi của bạn]
-- Chiều cao: [Nhập chiều cao cm]
-- Cân nặng: [Nhập cân nặng kg]
-- Mục tiêu: [Ví dụ: Giảm mỡ thừa / Tăng cơ nách / Ăn uống healthy trị mụn]
-- Sở thích / Kiêng kị: [Ví dụ: Ăn được hải sản, không ăn hành tây, hạn chế đồ cay]
-- Ngân sách / Phong cách: [Ví dụ: Bình dân, món ăn Việt Nam truyền thống dễ làm]
-
-Hãy xây dựng cho tôi bảng thực đơn 7 ngày chi tiết từng bữa sáng, trưa, tối và bữa phụ, đồng thời cung cấp danh sách nguyên liệu tổng hợp cần chuẩn bị.`,
-      instructions: `Bước 1: Bấm nút "Mở Tool" ở phía trên để chuyển tới GPTs chuyên biệt.
-Bước 2: Sao chép đoạn Prompt mẫu ở khung phía dưới.
-Bước 3: Thay thế các thông tin trong ngoặc vuông [] bằng chỉ số thực tế của bạn.
-Bước 4: Gửi cho trợ lý AI và làm theo hướng dẫn nấu ăn chi tiết!`
+      targetLink: 'https://zalo.me/0396989814',
+      prompt: `Cảm ơn bạn đã đặt mua Trà Túi Lọc Giải Độc Thanh Nhiệt Thái Bình. Hướng dẫn pha trà: Pha 1-2 túi lọc với 200ml nước sôi ngâm 3-5 phút.`,
+      instructions: `Hotline/Zalo hỗ trợ: 0396989814.`
     },
     faq: [
-      { question: 'Thực đơn AI có khó làm và tốn kém không?', answer: 'Hoàn toàn không. Trợ lý AI được huấn luyện để ưu tiên các món ăn Việt Nam gần gũi, nguyên liệu phổ thông dễ mua tại chợ hoặc siêu thị với mức ngân sách bình dân.' },
-      { question: 'Tôi có bị giới hạn số lần tạo thực đơn không?', answer: 'Bạn sở hữu vĩnh viễn và có thể tạo lại thực đơn vô hạn số lần bất cứ khi nào cân nặng hoặc mục tiêu của bạn thay đổi.' }
+      { question: 'Uống trà thanh nhiệt hàng ngày có tốt không?', answer: 'Trà được chế biến từ 100% thảo mộc tự nhiên lành tính, có thể uống thay nước lọc hàng ngày rất tốt cho sức khỏe.' }
     ],
     seo: {
-      title: 'AI Thực Đơn Cá Nhân Hóa 7 Ngày - Sống Khoẻ Cùng Hồng',
-      description: 'Lên thực đơn ăn uống khoa học cá nhân hóa với trợ lý AI chuyên nghiệp. Tự động chia calo macro chuẩn gym.',
-      keywords: 'thực đơn ai, thực đơn giảm cân, dinh dưỡng 7 ngày, tính calo, eat clean'
+      title: 'Trà Thanh Nhiệt Thái Bình',
+      description: 'Trà túi lọc giải độc thanh nhiệt Thái Bình mát gan giải độc.',
+      keywords: 'tra thanh nhiet, tra thai binh'
     }
   },
   {
-    id: 'tool-hlv-ca-nhan',
-    name: 'AI Huấn Luyện Viên Thể Hình Tại Nhà',
-    slug: 'ai-hlv-ca-nhan',
-    thumbnail: 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?q=80&w=450&h=800&fit=crop', // Vertical gym/fitness
-    banner: 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?q=80&w=1200&h=400&fit=crop',
+    id: 'tool-tra-xuyen-tam-lien',
+    name: 'Xuyên Tâm Liên',
+    slug: 'xuyen-tam-lien',
+    thumbnail: 'https://images.unsplash.com/photo-1597481499750-3e6b22637e12?q=80&w=450&h=800&fit=crop',
+    banner: 'https://images.unsplash.com/photo-1597481499750-3e6b22637e12?q=80&w=1200&h=400&fit=crop',
     videoDemo: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
-    shortDescription: 'Thiết kế giáo án tập luyện tại nhà cá nhân hóa không cần dụng cụ, tối ưu hóa theo thể lực và nhóm cơ mong muốn.',
-    longDescription: `### Tập luyện chuẩn khoa học ngay tại nhà cùng AI Coach
+    shortDescription: 'Hỗ trợ sức khỏe hệ miễn dịch, thanh nhiệt giải độc, bảo vệ chức năng gan.',
+    longDescription: `### Trà Túi Lọc Xuyên Tâm Liên
+    
+Xuyên tâm liên là vị thuốc dân gian quý giá giúp bảo vệ đường hô hấp và nâng cao hệ miễn dịch tự nhiên của cơ thể.
 
-Không cần tốn hàng triệu đồng mua thẻ tập gym hay thuê PT đắt đỏ. Trợ lý **AI Huấn Luyện Viên Cá Nhân** sẽ đồng hành và xây dựng riêng cho bạn một lịch trình rèn luyện thể lực tối ưu nhất ngay tại phòng khách của bạn.
-
-#### Điểm vượt trội của công cụ:
-- **Tập trung nhóm cơ mục tiêu**: Lựa chọn tập toàn thân, bụng sáu múi, mông đùi săn chắc hoặc cải thiện tư thế vai gáy.
-- **Không cần dụng cụ phức tạp**: 95% bài tập là Bodyweight (sử dụng chính trọng lượng cơ thể), dễ dàng thực hiện ở bất kỳ đâu.
-- **Điều chỉnh theo cấp độ**: Từ người mới bắt đầu (Beginner) chưa từng vận động đến người đã tập luyện lâu năm.
-- **Thời gian linh hoạt**: Giáo án tự động điều chỉnh độ dài buổi tập từ 15 phút, 30 phút đến 45 phút phù hợp lịch trình của bạn.`,
-    priceOriginal: 399000,
-    priceSale: 199000,
+#### Công dụng nổi bật:
+- **Tăng cường đề kháng**: Hỗ trợ cơ thể chống lại các tác nhân gây bệnh hô hấp thông thường.
+- **Thanh nhiệt giải độc**: Giúp làm mát cơ thể, giảm các triệu chứng nóng trong, nhiệt miệng.
+- **Hỗ trợ chức năng gan**: Tăng cường bảo vệ gan và nâng cao thể trạng tổng thể.`,
+    priceOriginal: 90000,
+    priceSale: 70000,
     rating: 5,
     reviewCount: 31,
     purchaseCount: 98,
     copyCount: 212,
-    categoryId: 'cat-luyen-tap',
-    tags: ['Thể hình', 'Tập tại nhà', 'Workout', 'Fitness'],
+    categoryId: 'cat-phong-cach-song',
+    tags: ['Xuyên tâm liên', 'Đề kháng', 'Bảo vệ hô hấp'],
     isHot: false,
     isNew: true,
     isFree: false,
-    version: 'v1.3',
-    lastUpdated: '2026-07-10T09:00:00Z',
+    version: 'v1.0',
+    lastUpdated: '2026-07-20T08:00:00Z',
     changelog: [
-      { version: 'v1.3', date: '2026-07-10T09:00:00Z', content: 'Tích hợp thêm giáo án giãn cơ sâu phục hồi cơ bắp giảm nhức mỏi xương khớp.' },
-      { version: 'v1.2', date: '2026-05-18T09:00:00Z', content: 'Nâng cấp khả năng đề xuất bài tập thay thế tránh đau khớp gối cho người béo phì.' }
+      { version: 'v1.0', date: '2026-07-20T08:00:00Z', content: 'Phát hành chính thức Trà Xuyên Tâm Liên.' }
     ],
     secretData: {
-      targetLink: 'https://chatgpt.com/g/g-fitness-coach-simulation',
-      prompt: `Hãy đóng vai là một Huấn luyện viên thể hình chuyên nghiệp (PT). Thiết kế cho tôi một giáo trình tập luyện 4 tuần tại nhà với các tiêu chí sau:
-- Giới tính: [Nam/Nữ]
-- Cấp độ thể lực: [Yếu / Trung bình / Khá tốt]
-- Nhóm cơ muốn ưu tiên cải thiện: [Ví dụ: Cơ bụng, mông đùi, giảm mỡ bắp tay]
-- Thời gian tập luyện mỗi ngày có thể dành ra: [Ví dụ: 30 phút buổi chiều tối]
-- Vấn đề sức khỏe cần lưu ý: [Ví dụ: Đau nhẹ thắt lưng, hay mỏi vai gáy]
-
-Hãy xuất ra lịch tập 4 tuần cụ thể, số reps, số sets cho từng bài tập kèm mô tả động tác trực quan.`,
-      instructions: `Bước 1: Bấm nút "Mở Tool" để chuyển hướng sang GPT chuyên gia.
-Bước 2: Copy mẫu prompt bên dưới, sửa đổi giới tính, thể lực và mục tiêu của bạn.
-Bước 3: Nhận lịch tập 4 tuần và bắt đầu thay đổi vóc dáng ngay hôm nay!`
+      targetLink: 'https://zalo.me/0396989814',
+      prompt: `Cảm ơn bạn đã chọn mua Trà Xuyên Tâm Liên.`,
+      instructions: `Hotline hỗ trợ: 0396989814.`
     },
     faq: [
-      { question: 'Tôi bị đau khớp gối có tập được không?', answer: 'Được chứ! Khi nhập thông tin vào prompt, bạn chỉ cần điền phần lưu ý về sức khỏe là "Đau khớp gối", AI sẽ tự động loại bỏ các bài gây áp lực lên gối như Squat nặng, Jump Lunge... và thay bằng bài tập an toàn.' },
-      { question: 'Có cần mua tạ hay thảm tập không?', answer: 'Bạn chỉ cần một khoảng không gian trống khoảng 2m vuông và chiếc thảm tập mỏng (nếu có để êm lưng). Toàn bộ giáo án tập trung vào chuyển động tự nhiên.' }
+      { question: 'Thời điểm nào uống tốt nhất?', answer: 'Nên uống sau bữa ăn 30 phút.' }
     ],
     seo: {
-      title: 'AI PT Huấn Luyện Viên Thể Hình Tại Nhà - Sống Khoẻ Cùng Hồng',
-      description: 'Lập giáo trình thể hình, HIIT, Cardio giảm cân tại nhà tự động cùng HLV AI chuyên nghiệp.',
-      keywords: 'hlv ai, pt online, tap gym tai nha, workout, cardio giam mo'
+      title: 'Trà Xuyên Tâm Liên',
+      description: 'Trà túi lọc Xuyên Tâm Liên.',
+      keywords: 'xuyen tam lien'
     }
   },
   {
-    id: 'tool-nhat-ky-chua-lanh',
-    name: 'AI Trị Liệu & Viết Nhật Ký Chữa Lành Tâm Hồn',
-    slug: 'ai-nhat-ky-chua-lanh',
-    thumbnail: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?q=80&w=450&h=800&fit=crop', // Vertical meditation/mindfulness
-    banner: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?q=80&w=1200&h=400&fit=crop',
+    id: 'tool-tra-day-thia-canh-linh-chi',
+    name: 'Trà Dây Thìa Canh Linh Chi',
+    slug: 'tra-day-thia-canh-linh-chi',
+    thumbnail: 'https://images.unsplash.com/photo-1564890369478-c89ca6d9cde9?q=80&w=450&h=800&fit=crop',
+    banner: 'https://images.unsplash.com/photo-1564890369478-c89ca6d9cde9?q=80&w=1200&h=400&fit=crop',
     videoDemo: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
-    shortDescription: 'Lắng nghe không phán xét, thấu hiểu cảm xúc sâu kín và đồng hành cùng bạn viết nhật ký phục hồi năng lượng tinh thần.',
-    longDescription: `### Nơi tâm hồn bạn được lắng nghe và vỗ về
-
-Áp lực công việc, mối quan hệ đổ vỡ hay những lo toan cuộc sống khiến bạn kiệt sức? Hãy để **AI Trị Liệu & Viết Nhật Ký Chữa Lành** là người bạn tri kỷ, lắng nghe mọi tâm sự của bạn bất kể ngày đêm, không một lời phán xét hay chỉ trích.
-
-#### Những giá trị tinh thần bạn nhận được:
-- **Liệu pháp Viết (Journaling Therapy)**: AI dẫn dắt bạn qua những câu hỏi mở nhẹ nhàng để bạn tự tháo gỡ nút thắt trong lòng.
-- **Nhận diện cảm xúc tiêu cực**: Phân tích trạng thái lo âu, stress, trầm cảm nhẹ và đưa ra các bài tập thở, bài thiền ngắn phù hợp.
-- **Bảo mật tuyệt đối**: Cuộc trò chuyện của bạn là riêng tư, là nơi bạn thoải mái bộc lộ cái tôi chân thật nhất mà không sợ bị phơi bày.
-- **Hoàn toàn miễn phí**: Đồng hành cùng sứ mệnh "Sống Khoẻ Cùng Hồng", công cụ này được thiết kế phi lợi nhuận để lan tỏa năng lượng tích cực đến cộng đồng.`,
-    priceOriginal: 199000,
-    priceSale: 0,
+    shortDescription: 'Hỗ trợ ổn định đường huyết, hạ mỡ máu, cải thiện tuần hoàn và giảm nguy cơ biến chứng.',
+    longDescription: `### Trà Dây Thìa Canh Linh Chi
+    
+Sự kết hợp hoàn hảo giữa Dây Thìa Canh và Nấm Linh Chi cao cấp giúp hỗ trợ sức khỏe đường huyết.`,
+    priceOriginal: 110000,
+    priceSale: 80000,
     rating: 5,
     reviewCount: 68,
     purchaseCount: 350,
     copyCount: 789,
-    categoryId: 'cat-tam-tri',
-    tags: ['Chữa lành', 'Sức khỏe tinh thần', 'Mindfulness', 'Thiền'],
+    categoryId: 'cat-phong-cach-song',
+    tags: ['Dây thìa canh', 'Linh chi', 'Đường huyết'],
     isHot: true,
     isNew: false,
-    isFree: true,
+    isFree: false,
     version: 'v1.0',
-    lastUpdated: '2026-04-01T10:00:00Z',
+    lastUpdated: '2026-07-20T08:00:00Z',
     changelog: [
-      { version: 'v1.0', date: '2026-04-01T10:00:00Z', content: 'Phát hành chính thức công cụ viết nhật ký đồng hành chữa lành tâm trí miễn phí.' }
+      { version: 'v1.0', date: '2026-07-20T08:00:00Z', content: 'Phát hành chính thức Trà Dây Thìa Canh Linh Chi.' }
     ],
     secretData: {
-      targetLink: 'https://chatgpt.com/g/g-mindfulness-journal-helper',
-      prompt: `Chào bạn, hôm nay tôi muốn viết nhật ký chia sẻ cảm xúc. Hãy đóng vai là một chuyên gia tâm lý trị liệu tinh tế, nhẹ nhàng và ấm áp. Hãy lắng nghe câu chuyện của tôi dưới đây, sau đó phản hồi bằng sự thấu cảm cao nhất, hỏi tôi những câu hỏi gợi mở sâu sắc và đề xuất cho tôi 1 bài tập thở giải tỏa căng thẳng:
-  
-[Cảm xúc của bạn hôm nay là gì? Chuyện gì vừa xảy ra khiến bạn phiền lòng hoặc vui vẻ?]`,
-      instructions: `Bước 1: Bấm nút "Mở Tool" để bắt đầu phiên chia sẻ riêng tư.
-Bước 2: Bạn có thể copy mẫu prompt ở dưới để AI bắt đầu định hướng trị liệu chuyên sâu, hoặc chỉ cần tự do nhắn tin kể về ngày hôm nay của bạn.`
+      targetLink: 'https://zalo.me/0396989814',
+      prompt: `Cảm ơn bạn đã chọn Trà Dây Thìa Canh Linh Chi.`,
+      instructions: `Hotline hỗ trợ: 0396989814.`
     },
     faq: [
-      { question: 'Thông tin tâm sự của tôi có bị lộ ra ngoài không?', answer: 'Không. Toàn bộ hội thoại được thực hiện trên tài khoản cá nhân của bạn trên nền tảng AI và tuân thủ chính sách bảo mật dữ liệu tuyệt đối. Không ai ngoài bạn có quyền đọc được.' },
-      { question: 'Công cụ có thay thế được bác sĩ tâm lý không?', answer: 'AI hỗ trợ giải tỏa cảm xúc, lắng nghe và đưa ra bài tập thư giãn hỗ trợ đắc lực cho các trạng thái mệt mỏi thông thường. Đối với các bệnh lý trầm cảm nặng hoặc sang chấn tâm lý kéo dài, bạn rất nên tham khảo ý kiến chuyên khoa y tế.' }
+      { question: 'Uống bao nhiêu túi một ngày?', answer: 'Dùng 1-2 túi hãm nước ấm dùng thay nước lọc hàng ngày.' }
     ],
     seo: {
-      title: 'AI Viết Nhật Ký Chữa Lành & Trị Liệu Tâm Hồn - Sống Khoẻ Cùng Hồng',
-      description: 'Lắng nghe, thấu cảm, hướng dẫn thực hành chánh niệm chánh tư duy giải tỏa trầm cảm, lo âu miễn phí.',
-      keywords: 'nhật ký chữa lành, giải tỏa lo âu, thiền định chánh niệm, stress tâm lý, viết trị liệu'
+      title: 'Trà Dây Thìa Canh Linh Chi',
+      description: 'Trà Dây Thìa Canh Linh Chi.',
+      keywords: 'day thia canh, linh chi'
+    }
+  },
+  {
+    id: 'tool-tra-tia-to',
+    name: 'Trà Tía Tô',
+    slug: 'tra-tia-to',
+    thumbnail: 'https://images.unsplash.com/photo-1544787219-7f47ccb76574?q=80&w=450&h=800&fit=crop',
+    banner: 'https://images.unsplash.com/photo-1544787219-7f47ccb76574?q=80&w=1200&h=400&fit=crop',
+    videoDemo: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+    shortDescription: 'Thanh nhiệt, giải độc, hỗ trợ tiêu hóa, dưỡng da tươi trẻ và hỗ trợ người gặp vấn đề đường huyết & gút.',
+    longDescription: `### Trà Tía Tô Thảo Dược
+    
+Tía tô là thảo mộc tự nhiên hỗ trợ giải cảm, tiêu hóa tốt và làm đẹp da.`,
+    priceOriginal: 100000,
+    priceSale: 80000,
+    rating: 5,
+    reviewCount: 25,
+    purchaseCount: 0,
+    copyCount: 190,
+    categoryId: 'cat-phong-cach-song',
+    tags: ['Tía tô', 'Tiêu hóa', 'Dưỡng da'],
+    isHot: false,
+    isNew: true,
+    isFree: false,
+    version: 'v1.0',
+    lastUpdated: '2026-07-20T08:00:00Z',
+    changelog: [
+      { version: 'v1.0', date: '2026-07-20T08:00:00Z', content: 'Phát hành chính thức Trà Tía Tô.' }
+    ],
+    secretData: {
+      targetLink: 'https://zalo.me/0396989814',
+      prompt: `Cảm ơn bạn đã mua Trà Tía Tô.`,
+      instructions: `Hotline hỗ trợ: 0396989814.`
+    },
+    faq: [
+      { question: 'Trà tía tô dùng có dịu dạ dày không?', answer: 'Rất dịu nhẹ và tốt cho tiêu hóa.' }
+    ],
+    seo: {
+      title: 'Trà Tía Tô',
+      description: 'Trà Tía Tô Thảo Dược.',
+      keywords: 'tra tia to'
     }
   }
 ];
