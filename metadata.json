@@ -1,0 +1,6 @@
+{
+  "name": "Sống Khoẻ Cùng Hồng",
+  "description": "Nền tảng cung cấp công cụ AI chăm sóc sức khỏe, dinh dưỡng và lối sống lành mạnh.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
