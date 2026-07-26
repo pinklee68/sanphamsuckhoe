@@ -50,7 +50,7 @@ export default function OrderHistory({
       {/* Page Header */}
       <div className="border-b border-white/5 pb-4">
         <h1 className="font-display text-2xl font-extrabold text-white">Lịch Sử Mua Hàng</h1>
-        <p className="text-xs text-gray-400 mt-1">Quản lý và xem tiến trình phê duyệt của các đơn hàng mua trợ lý AI.</p>
+        <p className="text-xs text-gray-400 mt-1">Quản lý và xem tiến trình phê duyệt của các đơn hàng mua sản phẩm.</p>
       </div>
 
       {/* Orders log list */}
@@ -61,7 +61,7 @@ export default function OrderHistory({
           </div>
           <h3 className="font-display text-base font-bold text-gray-300">Bạn chưa có đơn hàng nào</h3>
           <p className="text-xs text-gray-500 max-w-sm mx-auto leading-relaxed">
-            Hãy khám phá các Trợ lý AI dinh dưỡng, luyện tập và tâm trí trên trang chủ để sở hữu công cụ hữu ích nhất.
+            Hãy khám phá các sản phẩm thảo dược, dinh dưỡng và chăm sóc sức khỏe trên trang chủ.
           </p>
         </div>
       ) : (
@@ -115,7 +115,7 @@ export default function OrderHistory({
                           onClick={() => onSelectTool(item.toolId)}
                           className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-purple-500/10 text-purple-400 hover:bg-purple-500/20 text-[10px] font-bold transition-all border border-purple-500/20"
                         >
-                          <span>Sử dụng ngay</span>
+                          <span>Xem sản phẩm</span>
                           <ExternalLink className="h-3 w-3" />
                         </button>
                       )}

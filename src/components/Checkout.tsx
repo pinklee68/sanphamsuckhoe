@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
+import confetti from 'canvas-confetti';
 import { Order, GlobalSettings } from '../types';
 import { DatabaseService } from '../lib/db';
-import { CheckCircle2, Clipboard, ShieldCheck, Clock, ArrowLeft, RefreshCw, Smartphone } from 'lucide-react';
+import { CheckCircle2, Clipboard, ShieldCheck, Clock, ArrowLeft, RefreshCw, Smartphone, Sparkles } from 'lucide-react';
 
 interface CheckoutProps {
   order: Order;
@@ -18,9 +19,43 @@ export default function Checkout({
 }: CheckoutProps) {
   const [copiedField, setCopiedField] = useState<string | null>(null);
   const [checkingPayment, setCheckingPayment] = useState(false);
-  const [successStatus, setSuccessStatus] = useState<'pending' | 'paid' | 'cancelled'>('pending');
+  const [successStatus, setSuccessStatus] = useState<'pending' | 'paid' | 'cancelled'>(order.status || 'pending');
+  const [showThankYouModal, setShowThankYouModal] = useState(false);
+  const [hasFiredConfetti, setHasFiredConfetti] = useState(false);
 
   const { accountHolder, bankName, accountNumber } = globalSettings.paymentInfo;
+
+  // Trigger fireworks confetti animation
+  const triggerFireworks = () => {
+    const duration = 3.5 * 1000;
+    const animationEnd = Date.now() + duration;
+
+    const interval: any = setInterval(function () {
+      const timeLeft = animationEnd - Date.now();
+
+      if (timeLeft <= 0) {
+        return clearInterval(interval);
+      }
+
+      const particleCount = 50 * (timeLeft / duration);
+      confetti({
+        startVelocity: 35,
+        spread: 360,
+        ticks: 70,
+        zIndex: 10000,
+        particleCount,
+        origin: { x: Math.random() * 0.6 + 0.2, y: Math.random() * 0.5 + 0.1 }
+      });
+    }, 250);
+  };
+
+  const handleQrScannedSuccess = () => {
+    DatabaseService.updateOrderStatus(order.id, 'paid', 'system');
+    setSuccessStatus('paid');
+    setShowThankYouModal(true);
+    setHasFiredConfetti(true);
+    triggerFireworks();
+  };
 
   // Map common bank names to VietQR slugs
   const getBankSlug = (name: string) => {
@@ -58,7 +93,11 @@ export default function Checkout({
       // Fetch latest order status from database in case it was approved by Admin
       const freshOrder = DatabaseService.listOrders().find(o => o.id === order.id);
       if (freshOrder) {
-        setSuccessStatus(freshOrder.status);
+        if (freshOrder.status === 'paid' && successStatus !== 'paid') {
+          handleQrScannedSuccess();
+        } else {
+          setSuccessStatus(freshOrder.status);
+        }
       }
     }, 1500);
   };
@@ -69,13 +108,85 @@ export default function Checkout({
       const freshOrder = DatabaseService.listOrders().find(o => o.id === order.id);
       if (freshOrder && freshOrder.status !== successStatus) {
         setSuccessStatus(freshOrder.status);
+        if (freshOrder.status === 'paid' && !hasFiredConfetti) {
+          setShowThankYouModal(true);
+          setHasFiredConfetti(true);
+          triggerFireworks();
+        }
       }
     }, 4000);
     return () => clearInterval(timer);
-  }, [order.id, successStatus]);
+  }, [order.id, successStatus, hasFiredConfetti]);
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
+    <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8 relative">
+      {/* Thank You Modal Popup with Fireworks */}
+      {showThankYouModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in">
+          <div className="relative w-full max-w-lg rounded-3xl bg-[#111827] border-2 border-purple-500/40 p-8 text-center space-y-6 shadow-2xl shadow-purple-950/80 overflow-hidden">
+            {/* Background glow effects */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-purple-500/20 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute -bottom-10 -right-10 w-48 h-48 bg-pink-500/20 rounded-full blur-2xl pointer-events-none" />
+
+            {/* Floating Sparkles Icon */}
+            <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-3xl bg-gradient-to-tr from-purple-500 via-pink-500 to-emerald-400 text-white shadow-xl shadow-purple-500/30 animate-bounce">
+              <Sparkles className="h-10 w-10 text-white" />
+            </div>
+
+            {/* Main requested text */}
+            <div className="space-y-3">
+              <span className="inline-block px-3.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-bold uppercase tracking-widest">
+                Thanh Toán QR Thành Công 🎉
+              </span>
+              <h2 className="font-display text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-200 via-pink-200 to-white uppercase tracking-tight leading-tight">
+                CẢM ƠN BẠN ĐÃ GHÉ THĂM CỬA HÀNG CỦA CHÚNG TÔI
+              </h2>
+              <p className="text-sm text-gray-300 leading-relaxed">
+                Đơn hàng <span className="font-mono text-purple-400 font-bold">{order.id}</span> đã được ghi nhận thanh toán thành công!
+              </p>
+            </div>
+
+            {/* Order details summary */}
+            <div className="p-4 bg-[#030712] rounded-2xl border border-white/10 text-left text-xs space-y-2 font-mono">
+              <div className="flex justify-between text-gray-400">
+                <span>Mã đơn hàng:</span>
+                <span className="text-white font-bold">{order.id}</span>
+              </div>
+              <div className="flex justify-between text-gray-400">
+                <span>Tổng tiền:</span>
+                <span className="text-emerald-400 font-bold">{formatPrice(order.totalAmount)}</span>
+              </div>
+              <div className="flex justify-between text-gray-400">
+                <span>Nội dung chuyển:</span>
+                <span className="text-purple-300">{order.transferContent}</span>
+              </div>
+            </div>
+
+            {/* Action buttons */}
+            <div className="flex flex-col sm:flex-row gap-3 pt-2">
+              <button
+                onClick={() => {
+                  setShowThankYouModal(false);
+                  onBackToCatalog();
+                }}
+                className="flex-1 rounded-xl bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 py-3 text-sm font-bold text-white shadow-lg shadow-purple-500/25 hover:opacity-95 transition-all cursor-pointer"
+              >
+                Trở về Cửa Hàng
+              </button>
+              <button
+                onClick={() => {
+                  setShowThankYouModal(false);
+                  onGoToOrderHistory();
+                }}
+                className="flex-1 rounded-xl bg-white/10 border border-white/15 py-3 text-sm font-bold text-gray-200 hover:text-white hover:bg-white/15 transition-all cursor-pointer"
+              >
+                Xem Lịch Sử Đơn
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {successStatus === 'paid' ? (
         /* SUCCESS SCREEN IF PAID */
         <div className="rounded-2xl bg-[#111827] border border-emerald-500/20 p-8 text-center space-y-6 premium-glow">
@@ -85,7 +196,7 @@ export default function Checkout({
           <div className="space-y-2">
             <h2 className="font-display text-2xl font-black text-white">Thanh Toán Thành Công!</h2>
             <p className="text-sm text-gray-400 max-w-md mx-auto leading-relaxed">
-              Đơn hàng <span className="font-mono text-purple-400 font-bold">{order.id}</span> đã được quản trị viên phê duyệt. Toàn bộ các công cụ AI trong hóa đơn đã được mở khóa và sẵn sàng sử dụng.
+              Đơn hàng <span className="font-mono text-purple-400 font-bold">{order.id}</span> đã được quản trị viên phê duyệt. Toàn bộ các sản phẩm trong hóa đơn đã được xác nhận.
             </p>
           </div>
 
@@ -97,10 +208,20 @@ export default function Checkout({
 
           <div className="flex flex-wrap justify-center gap-4 pt-4">
             <button
+              onClick={() => {
+                triggerFireworks();
+                setShowThankYouModal(true);
+              }}
+              className="rounded-xl bg-emerald-500/20 border border-emerald-500/40 px-5 py-3 text-sm font-bold text-emerald-300 hover:bg-emerald-500/30 transition-all cursor-pointer flex items-center gap-2"
+            >
+              <Sparkles className="h-4 w-4" />
+              <span>Xem Lại Thông Báo Cảm Ơn</span>
+            </button>
+            <button
               onClick={onBackToCatalog}
               className="rounded-xl bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-purple-500/20 hover:opacity-90 transition-all cursor-pointer"
             >
-              Vào Cửa Hàng Sử Dụng Tool
+              Quay về Cửa Hàng Sản Phẩm
             </button>
             <button
               onClick={onGoToOrderHistory}
@@ -158,7 +279,7 @@ export default function Checkout({
                     </div>
                     <button
                       onClick={() => handleCopy(bankName, 'bank')}
-                      className="p-2 text-gray-500 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
+                      className="p-2 text-gray-500 hover:text-white hover:bg-white/5 rounded-lg transition-colors cursor-pointer"
                     >
                       <Clipboard className="h-4 w-4" />
                     </button>
@@ -172,7 +293,7 @@ export default function Checkout({
                     </div>
                     <button
                       onClick={() => handleCopy(accountNumber, 'num')}
-                      className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white/5 text-xs text-gray-400 hover:text-white transition-colors border border-white/5"
+                      className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white/5 text-xs text-gray-400 hover:text-white transition-colors border border-white/5 cursor-pointer"
                     >
                       <Clipboard className="h-3.5 w-3.5" />
                       <span>{copiedField === 'num' ? 'Đã copy' : 'Copy'}</span>
@@ -187,7 +308,7 @@ export default function Checkout({
                     </div>
                     <button
                       onClick={() => handleCopy(accountHolder, 'holder')}
-                      className="p-2 text-gray-500 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
+                      className="p-2 text-gray-500 hover:text-white hover:bg-white/5 rounded-lg transition-colors cursor-pointer"
                     >
                       <Clipboard className="h-4 w-4" />
                     </button>
@@ -201,7 +322,7 @@ export default function Checkout({
                     </div>
                     <button
                       onClick={() => handleCopy(String(order.totalAmount), 'amount')}
-                      className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white/5 text-xs text-gray-400 hover:text-white transition-colors border border-white/5"
+                      className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white/5 text-xs text-gray-400 hover:text-white transition-colors border border-white/5 cursor-pointer"
                     >
                       <Clipboard className="h-3.5 w-3.5" />
                       <span>{copiedField === 'amount' ? 'Đã copy' : 'Copy'}</span>
@@ -216,7 +337,7 @@ export default function Checkout({
                     </div>
                     <button
                       onClick={() => handleCopy(order.transferContent, 'content')}
-                      className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-purple-500/10 text-xs text-purple-300 hover:bg-purple-500/20 transition-colors border border-purple-500/20"
+                      className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-purple-500/10 text-xs text-purple-300 hover:bg-purple-500/20 transition-colors border border-purple-500/20 cursor-pointer"
                     >
                       <Clipboard className="h-3.5 w-3.5" />
                       <span>{copiedField === 'content' ? 'Đã copy' : 'Copy'}</span>
@@ -236,7 +357,7 @@ export default function Checkout({
 
             {/* Right Box: VietQR Code (2/5 width) */}
             <div className="md:col-span-2 space-y-6">
-              <div className="rounded-2xl bg-[#111827] border border-white/5 p-6 shadow-xl text-center space-y-5">
+              <div className="rounded-2xl bg-[#111827] border border-white/5 p-6 shadow-xl text-center space-y-4">
                 <h3 className="font-display text-sm font-bold text-white flex items-center justify-center gap-1.5">
                   <Smartphone className="h-4 w-4 text-purple-400" />
                   <span>Quét Mã QR VietQR</span>
@@ -255,6 +376,15 @@ export default function Checkout({
                 <div className="text-xs text-gray-400 leading-relaxed">
                   Mở ứng dụng Mobile Banking của bạn, quét mã QR trên để tự động điền đầy đủ thông tin: số tài khoản, số tiền và nội dung chuyển khoản.
                 </div>
+
+                {/* QR Scan Success button */}
+                <button
+                  onClick={handleQrScannedSuccess}
+                  className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 hover:from-emerald-400 hover:to-teal-500 py-3 text-xs font-extrabold text-white shadow-lg shadow-emerald-500/20 transition-all cursor-pointer active:scale-[0.99]"
+                >
+                  <Sparkles className="h-4 w-4" />
+                  <span>Xác Nhận Đã Quét QR & Thanh Toán</span>
+                </button>
 
                 {/* Simulated check transaction button */}
                 <div className="pt-2 border-t border-white/5">
@@ -292,3 +422,4 @@ export default function Checkout({
     </div>
   );
 }
+

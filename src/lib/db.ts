@@ -1,5 +1,5 @@
 import { User, Tool, Category, Order, Coupon, GlobalSettings } from '../types';
-import { db } from './firebase';
+import { db, auth, googleProvider } from './firebase';
 import {
   collection,
   doc,
@@ -8,6 +8,7 @@ import {
   deleteDoc,
   onSnapshot
 } from 'firebase/firestore';
+import { signInWithPopup } from 'firebase/auth';
 
 // Clean object for Firestore (removes undefined values)
 const sanitizeForFirestore = <T>(obj: T): T => {
@@ -395,7 +396,18 @@ export class DatabaseService {
   }
 
   private static getOrders(): Order[] {
-    return getStored<Order[]>('skch_orders', []);
+    const orders = getStored<Order[]>('skch_orders', []);
+    let modified = false;
+    orders.forEach(o => {
+      if (o.transferContent && o.transferContent.includes('NAP TOOLAI')) {
+        o.transferContent = o.transferContent.replace('NAP TOOLAI', 'THANH TOAN');
+        modified = true;
+      }
+    });
+    if (modified) {
+      setStored('skch_orders', orders);
+    }
+    return orders;
   }
 
   private static getCoupons(): Coupon[] {
@@ -545,7 +557,7 @@ export class DatabaseService {
     const orderId = `KH${padStr}`;
     
     // Generate simulated payment identifier (Transfer Content)
-    const transferContent = `NAP TOOLAI ${orderId}`;
+    const transferContent = `THANH TOAN ${orderId}`;
 
     const newOrder: Order = {
       id: orderId,
@@ -690,6 +702,38 @@ export class AuthService {
 
     setStored('skch_current_user', user);
     return user;
+  }
+
+  public static async loginWithGoogleReal(): Promise<User> {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const fbUser = result.user;
+      const email = fbUser.email?.trim().toLowerCase() || '';
+      if (!email) throw new Error('Không lấy được thông tin Email Google.');
+
+      const displayName = fbUser.displayName || email.split('@')[0];
+      const photoURL = fbUser.photoURL || `https://api.dicebear.com/7.x/adventurer/svg?seed=${encodeURIComponent(displayName)}`;
+      const role = email === 'lthongxanh@gmail.com' ? 'admin' : 'user';
+      const uid = fbUser.uid || 'uid_gg_' + btoa(email).replace(/=/g, '');
+
+      let user: User = {
+        uid,
+        email,
+        displayName,
+        photoURL,
+        role,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        bookmarks: []
+      };
+
+      DatabaseService.saveUser(user);
+      setStored('skch_current_user', user);
+      return user;
+    } catch (error: any) {
+      console.warn('Firebase signInWithPopup:', error);
+      throw error;
+    }
   }
 
   public static loginWithGoogle(userEmail?: string): User {
