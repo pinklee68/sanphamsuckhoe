@@ -105,10 +105,10 @@ export default function ToolCard({
               <span className="font-semibold text-white">{tool.rating}</span>
             </div>
             <span className="text-gray-600">•</span>
-            <span>Đã sở hữu: {tool.purchaseCount}</span>
+            <span>Đã bán: {tool.purchaseCount}</span>
           </div>
 
-          {/* Pricing Row */}
+          {/* Pricing & Cart Action Row */}
           <div className="mt-3 flex items-center justify-between border-t border-white/5 pt-3">
             <div>
               {tool.isFree ? (
@@ -127,32 +127,42 @@ export default function ToolCard({
               )}
             </div>
 
-            {/* Quick Purchase/Own Action */}
-            {hasPurchased ? (
-              <span className="inline-flex items-center gap-1 text-[11px] font-medium text-purple-400 bg-purple-500/10 border border-purple-500/20 px-2 py-1 rounded-lg">
-                <Check className="h-3.5 w-3.5" />
-                Đã mở khóa
-              </span>
-            ) : tool.isFree ? (
+            {/* Add to Cart Button */}
+            {tool.isFree ? (
               <button
                 type="button"
-                className="rounded-lg bg-emerald-500/10 border border-emerald-500/20 px-2 py-1 text-[11px] font-medium text-emerald-400 hover:bg-emerald-500/20 transition-colors"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onSelect();
+                }}
+                className="rounded-lg bg-emerald-500/20 border border-emerald-500/30 px-3 py-1.5 text-xs font-bold text-emerald-300 hover:bg-emerald-500/30 transition-colors"
               >
-                Trải nghiệm
+                Xem ngay
               </button>
             ) : (
               <button
+                type="button"
                 onClick={(e) => {
                   e.stopPropagation();
                   onAddToCart(e);
                 }}
-                className={`p-1.5 rounded-lg border transition-all ${
+                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                   isInCart
-                    ? 'bg-purple-500/10 border-purple-500/30 text-purple-400'
-                    : 'bg-white/5 border-white/5 text-gray-300 hover:bg-purple-500/15 hover:border-purple-500/20 hover:text-white'
+                    ? 'bg-purple-500/20 border border-purple-500/40 text-purple-300 shadow-sm shadow-purple-500/20'
+                    : 'bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white shadow-md shadow-purple-500/20 hover:scale-[1.03] active:scale-95'
                 }`}
               >
-                {isInCart ? <Check className="h-4 w-4" /> : <ShoppingCart className="h-4 w-4" />}
+                {isInCart ? (
+                  <>
+                    <Check className="h-3.5 w-3.5 text-purple-300" />
+                    <span>Đã trong giỏ</span>
+                  </>
+                ) : (
+                  <>
+                    <ShoppingCart className="h-3.5 w-3.5" />
+                    <span>+ Giỏ hàng</span>
+                  </>
+                )}
               </button>
             )}
           </div>

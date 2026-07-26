@@ -480,15 +480,7 @@ export default function ToolDetail({
               </div>
 
               {/* Dynamic Buttons depending on Purchase status */}
-              {hasPurchased ? (
-                <button
-                  onClick={() => setActiveTab('vip')}
-                  className="w-full flex items-center justify-center gap-2 rounded-xl bg-purple-500/20 border border-purple-500/40 py-3.5 text-sm font-bold text-purple-300 hover:bg-purple-500/30 transition-colors cursor-pointer"
-                >
-                  <KeyRound className="h-4 w-4" />
-                  <span>Sử Dụng Trợ Lý AI</span>
-                </button>
-              ) : tool.isFree ? (
+              {tool.isFree ? (
                 <button
                   onClick={() => window.open(tool.secretData?.targetLink, '_blank')}
                   className="w-full flex items-center justify-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 py-3.5 text-sm font-bold text-white shadow-lg shadow-emerald-500/10 transition-colors cursor-pointer"
@@ -498,6 +490,12 @@ export default function ToolDetail({
                 </button>
               ) : (
                 <div className="space-y-3">
+                  {hasPurchased && (
+                    <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-xs text-emerald-400 font-medium text-center">
+                      ✓ Bạn đã từng đặt mua sản phẩm này
+                    </div>
+                  )}
+
                   <button
                     onClick={onDirectBuy}
                     className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 py-3.5 text-sm font-bold text-white shadow-lg shadow-purple-500/20 hover:scale-[1.01] transition-all cursor-pointer"
